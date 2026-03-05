@@ -3,24 +3,26 @@ steps:
   args:
     [
       "build",
+      "-f",
+      "quickstart-docker/Dockerfile",
       "-t",
       "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1",
-      "."
+      "quickstart-docker"
     ]
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args:
-  - run
-  - deploy
-  - Fantasy-Basketball-Assistant
-  - --image
-  - us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1
-  - --region
-  - us-west2
-  - --platform
-  - managed
-  - --allow-unauthenticated
+    [
+      "run","deploy","Fantasy-Basketball-Assistant",
+      "--image","us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1",
+      "--region","us-west2",
+      "--platform","managed",
+      "--allow-unauthenticated"
+    ]
 
 images:
-- us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1
+- "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
