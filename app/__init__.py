@@ -8,16 +8,13 @@ import os
 app = Flask(__name__) # creates app VARIABLE as instance of class Flask (__name__ references the name of the module in which it is used (returns __main__?))
 app.config.from_object(Config) # access sensitive info using something like app.config['<variable_name>']
 
+# Initialize Firebase
 if not firebase_admin._apps:
-
-    # Cloud Run environment
-    if os.environ.get("K_SERVICE"):
-        cred = credentials.ApplicationDefault()
-
-    # Local development
+    firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS")
+    if firebase_cred_path:
+        cred = credentials.Certificate(firebase_cred_path)
     else:
-        cred = credentials.Certificate(app.config["FIREBASE_CREDENTIALS"])
-
+        cred = credentials.ApplicationDefault()
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
