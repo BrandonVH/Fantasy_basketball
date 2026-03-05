@@ -15,6 +15,6 @@ COPY . .
 EXPOSE 8080
 
 # Run the app with gunicorn
-CMD ["gunicorn", "-b", "0.0.0.0:8080", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:$PORT", "app:app"]
 
 # https://docs.cloud.google.com/build/docs/build-push-docker-image
