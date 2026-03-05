@@ -1,32 +1,26 @@
 steps:
-  # Step 1: Build the container image
-  - name: 'gcr.io/cloud-builders/docker'
-    script: |
-      docker build \
-        -f "quickstart-docker/Dockerfile" \
-        -t us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1 \
-        "./quickstart-docker"
-    automapSubstitutions: true
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    [
+      "build",
+      "-t",
+      "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1",
+      "."
+    ]
 
-  # Step 2: Push the image to Artifact Registry (implicitly done by the 'images' field below)
-
-  # Step 3: Deploy to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'Fantasy-Basketball-Assistant'  # The name of your service
-      - '--image'
-      - 'us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1'
-      - '--region'
-      - 'us-west2'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated' # Makes the app public. Remove if you want it private.
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - run
+  - deploy
+  - Fantasy-Basketball-Assistant
+  - --image
+  - us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1
+  - --region
+  - us-west2
+  - --platform
+  - managed
+  - --allow-unauthenticated
 
 images:
-  - 'us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+- us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1
