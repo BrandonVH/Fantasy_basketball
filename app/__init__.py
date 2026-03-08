@@ -8,18 +8,25 @@ import os
 app = Flask(__name__) # creates app VARIABLE as instance of class Flask (__name__ references the name of the module in which it is used (returns __main__?))
 app.config.from_object(Config) # access sensitive info using something like app.config['<variable_name>']
 
-# Initialize Firebase
-if not firebase_admin._apps:
-    firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS")
+# Initialize Firebase (do not crash app startup if credentials are missing/misconfigured)
+try:
+    if not firebase_admin._apps:
+        firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS")
 
-    if firebase_cred_path and os.path.exists(firebase_cred_path):
-        cred = credentials.Certificate(firebase_cred_path)
-    else:
-        cred = credentials.ApplicationDefault()
+        if firebase_cred_path and os.path.exists(firebase_cred_path):
+            cred = credentials.Certificate(firebase_cred_path)
+        else:
+            cred = credentials.ApplicationDefault()
 
-    firebase_admin.initialize_app(cred)
+        firebase_admin.initialize_app(cred)
+except Exception as e:
+    print(f"[startup] Firebase init warning: {e}")
 
-db = firestore.client()
+try:
+    db = firestore.client()
+except Exception as e:
+    print(f"[startup] Firestore client warning: {e}")
+    db = None
 
 # firebase setup
 # cred = credentials.Certificate(app.config["FIREBASE_CREDENTIALS"])

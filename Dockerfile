@@ -4,6 +4,8 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
+ENV PYTHONUNBUFFERED=1
+
 # Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -15,7 +17,7 @@ COPY . .
 EXPOSE 8080
 
 # Run the app with gunicorn
-CMD gunicorn --bind 0.0.0.0:$PORT app:app
+CMD ["sh", "-c", "exec gunicorn --bind 0.0.0.0:${PORT:-8080} fantasy:app"]
 
 # CMD ["python", "fantasy.py"]
 

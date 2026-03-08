@@ -3,3 +3,10 @@
 venv/
 pycache/
 __pycache__
+.vscode/
+.git/
+.venv/
+*.pyc
+*.pyo
+*.pyd
+*.log
