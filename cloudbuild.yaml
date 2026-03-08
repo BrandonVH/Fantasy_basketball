@@ -6,8 +6,16 @@ steps:
     [
       "build",
       "-t",
-      "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1",
+      "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:$BUILD_ID",
       "."
+    ]
+
+# Push Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    [
+      "push",
+      "us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:$BUILD_ID"
     ]
 
 # Deploy to Cloud Run with secrets
@@ -16,16 +24,18 @@ steps:
   args:
     [
       "run","deploy","fantasy-basketball-assistant",
-      "--image","us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1",
+      "--image","us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:$BUILD_ID",
       "--region","us-west2",
       "--platform","managed",
       "--allow-unauthenticated",
+      "--command","gunicorn",
+      "--args=--bind=0.0.0.0:8080,fantasy:app",
       "--update-secrets","API_KEY=API_KEY_SECRET:latest",
-      --timeout=300
+      "--timeout=300"
     ]
 
 images:
-- us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:tag1
+- us-west2-docker.pkg.dev/$PROJECT_ID/quickstart-docker-repo/quickstart-image:$BUILD_ID
 
 options:
   logging: CLOUD_LOGGING_ONLY
