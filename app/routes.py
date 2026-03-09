@@ -168,8 +168,7 @@ def index(): # view function mapped to one or more route URLs so Flask knows wha
         rankings = generate_player_rankings(
             db,
             by="avg_points",
-            position=position if position else None,
-            top_n=int(top_n) if top_n else 50,
+            position=position if position else None
         )
     except Exception as e:
         err = str(e)
