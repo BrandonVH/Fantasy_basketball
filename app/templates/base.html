@@ -30,6 +30,7 @@
         display: flex;
         justify-content: center;   /* center links */
         align-items: center;
+        flex-wrap: wrap;
         gap: 2rem;
         padding: 1rem 2rem;
         background-color: #1e1e1e;
@@ -37,6 +38,7 @@
       }
       nav a {
         font-weight: 500;
+        white-space: nowrap;
       }
       main {
         flex: 1;
@@ -107,7 +109,14 @@
         width: 100%;   
         margin: 0 auto;      
         padding: 0 24px; 
+        box-sizing: border-box;
         margin-top: 1rem;    
+      }
+      @media (max-width: 640px) {
+        nav {
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+        }
       }
     </style>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='basketball_1323394.png') }}">
