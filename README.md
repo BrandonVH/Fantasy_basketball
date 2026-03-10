@@ -1,3 +1,5 @@
+Official Deployment Available At: https://fantasy-basketball-assistant-1078149421009.us-west2.run.app/index
+
 To Host Application Locally: 
 
 1. python -m venv venv (in vscode terminal)
